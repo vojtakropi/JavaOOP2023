@@ -29,4 +29,12 @@ public class Main {
         calculator.Calculate();
         calculator.DeleteEntries();
     }
+
+    private String concat(String a, String b){
+        return a + " " + b;
+    }
+
+    private int sumStrings(String a, String b){
+        return Integer.parseInt(a) + Integer.parseInt(b);
+    }
 }
