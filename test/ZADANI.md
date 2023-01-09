@@ -1,0 +1,31 @@
+- Uvažujte, že modelujete jednoduchý systém vyzvedávání zásilek "ČVUT-BOX"
+- Chceme implementovat funkcionalitu "ukládání a vyzvednutí zboží"
+- Funkcionalita:
+  - Do schránek v každém boxu je možné ukládat zboží
+    - Každý box má právě 20 schránek, každá schránka pak může obsahovat dané zboží
+    - Při vkládání zboží do boxu se box stará o výběr první volné schránky, kterou nalezne
+    - Pokud není žádná dostupná -> výjímka (IllegalStateException)
+  - Pokud je zboží vloženo do schránky, box se musí postarat o odeslání notifikace příjemci (uživateli), jedná se o notifikaci pro vyzvednutí zásilky
+    - Zpráva by měla obsahovat id zásilky a id boxu, ve kterém se nachází
+  - Uživatel přichází k boxu s požadavkem na vyzvednutí zásilky
+    - Instance konkrétního boxu by měla obsahovat metodu 'requestParcelPickup', která má na vstupu id zásilky
+    - Po zjištění, že zásilka s tímto id je v boxu se musí box postarat o bezpečnostní ověření
+      - Tj. odeslání další notifikace pro příjemce, která bude obsahovat vygenerovaný 4 místný kód (použijte metodu 'Application.random4Digits')
+      - Tento kód je možné boxu zadat přes metodu 'getParcel', která má na vstupu tento 4 místný kód
+      - Pokud se kódy rovnají, zásilka je vydána, tj. odstraněna ze schránky a její instance je vrácena touto metodou
+      - Bezpečnostní kódy by měly být drženy v odpovídající struktuře (např. ke konkrétní schránce) a vždy po použití "vyčištěny"
+- Vytvořte model, který bude odpovídat výše uvedené funkcionalitě
+- Vhodně zvolte návrhový vzor, který vám hlavní funkcionalitu této úlohy usnadní
+- Ke všem operacím přidejte výpisy (stačí přes System.out.println)
+- Vytvořte test, který bude popisovat následující scénář:
+  - Vytvoříte instanci CVUT-BOX
+  - Vytvoříte uživatele U1 a U2
+  - Vytvoříte zásilky Z1 pro uživatele U1 a Z2 pro uživatele U2
+  - Obě zásilky vložíte do boxu
+  - Uživatelé by nyní měli mít ve svých datech informace k vyzvednutí zásilky
+  - Simulujte pro OBA uživatele vyzvednutí zboží
+    - Vkládejte do vyzvedávacích metod ('requestParcelPickup' a 'getParcel') data přímo z U1 a U2
+    - Tj. po použití 'requestParcelPickup' by měl mít daný dostupný kód, kterým dokáže zavolat 'getParcel'
+  - Doplňte podstatné Assertions
+    - Tj. 'getParcel' nevrátí null pokud k vyzvednutí došlo
+    - Zboží bylo odebráno ze schránky/bezpečnostní kód vyčistěn atd..
