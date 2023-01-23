@@ -26,7 +26,7 @@ public class ApplicationTest {
         String code = u1.getInfo();
         Assertions.assertNotNull(cvutBox.getParcel(code));
         cvutBox.requestParcelPickup(2, u2);
-        String code2 = u1.getInfo();
+        String code2 = u2.getInfo();
         Assertions.assertNotNull(cvutBox.getParcel(code2));
 
     }
