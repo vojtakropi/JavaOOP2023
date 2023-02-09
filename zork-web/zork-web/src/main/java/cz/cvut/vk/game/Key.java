@@ -13,6 +13,9 @@ public class Key implements Item{
         this.name = name;
     }
 
+    public Key() {
+    }
+
     @Override
     public int getID() {
         return ID;

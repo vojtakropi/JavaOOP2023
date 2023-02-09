@@ -71,7 +71,7 @@ public class EnemyImpl implements Enemy{
         int hp = gameData.getHP();
         hp = hp - dmg;
         if(hp <= 0){
-            gameData.setFinished(true, false);
+            gameData.setFinished(true, true);
             return "umřel jsi";
         }else {
             gameData.setHP(hp);

@@ -8,7 +8,8 @@ public class InventoryImpl implements Inventory {
 
     private HashMap<Integer, Item> items = new HashMap<>();
 
-    
+    public InventoryImpl() {
+    }
 
     @Override
     public String addItem(Item item, GameData gameData) {

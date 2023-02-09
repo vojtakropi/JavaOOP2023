@@ -10,6 +10,9 @@ public class Armor implements Item{
 
     private String description;
 
+    public Armor() {
+    }
+
     public Armor(int HPGain, String name, String description) {
         this.HPGain = HPGain;
         this.name = name;

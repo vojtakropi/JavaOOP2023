@@ -24,6 +24,7 @@ public class GameImpl implements Game {
     private LocalDateTime enddate;
 
 
+
     public GameImpl(){
         this.registerCommands();
         this.gameData = new GameDataImpl();
@@ -59,7 +60,7 @@ public class GameImpl implements Game {
      */
     @Override
     public String welcomeMessage() {
-        startdate = java.time.LocalDateTime.now();
+        //startdate = java.time.LocalDateTime.now();
         return  "Vítej ve hře Vojtův Dungeon \n pokud nevíte co a jak, použijte příkaz 'nápověda' \n právě jste v místonti: "
                 + gameData.getCurrentRoom().getDescription() +"\n Další místnost je " + gameData.getCurrentRoom().getExits()+
                 "\n v místnosti jsou tyto předměty: " + gameData.getCurrentRoom().getItems() +
@@ -113,7 +114,7 @@ public class GameImpl implements Game {
      */
     @Override
     public boolean isFinished() {
-        enddate = java.time.LocalDateTime.now();
+        //enddate = java.time.LocalDateTime.now();
         return gameData.isFinished();
     }
     @Override

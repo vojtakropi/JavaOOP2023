@@ -3,21 +3,22 @@ package cz.cvut.vk.model;
 
 import jakarta.persistence.*;
 
-import java.util.Objects;
-
 @Entity
 @Table(name = "scoreboard")
-public class ScoreboardRecord {
+public class GameRecord {
 
     @Id
     @GeneratedValue
     @Column(name = "id")
     private Long id;
-    @Column(name = "name")
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserRecord user;
     @Column(name = "time")
     private Long time;
 
+    @Column(name = "game")
+    private String game;
     @Column(name = "state")
     private String state;
 
@@ -29,12 +30,12 @@ public class ScoreboardRecord {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public UserRecord getUser() {
+        return user;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUser(UserRecord user) {
+        this.user = user;
     }
 
     public Long getTime() {
@@ -51,5 +52,13 @@ public class ScoreboardRecord {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getGame() {
+        return game;
+    }
+
+    public void setGame(String game) {
+        this.game = game;
     }
 }

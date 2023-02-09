@@ -16,6 +16,9 @@ public class RoomImpl implements Room {
     private Enemy enemy;
 
 
+    public RoomImpl() {
+    }
+
     public RoomImpl(String name, String description){
         this.name = name;
         this.description = description;

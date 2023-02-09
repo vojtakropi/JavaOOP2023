@@ -14,6 +14,9 @@ public class Weapon implements Item {
 
     private static final int ID = 1;
 
+    public Weapon() {
+    }
+
     public Weapon(String description, int dmgLow, int dmgHigh, String name) {
         this.description = description;
         this.dmgLow = dmgLow;

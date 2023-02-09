@@ -21,7 +21,7 @@ public class GameDataImpl implements GameData {
 
     private int maxHp;
 
-    Inventory inventory = new InventoryImpl();
+    private Inventory inventory;
 
     @Override
     public void setMaxHP(int maxHp) {
@@ -62,6 +62,7 @@ public class GameDataImpl implements GameData {
      *  Room map registration in constructor
      */
     public GameDataImpl(){
+        this.inventory = new InventoryImpl();
         this.init();
     }
 
@@ -78,7 +79,7 @@ public class GameDataImpl implements GameData {
         roomMid.registerExit(roomFinal);
 
         Enemy trol = new EnemyImpl().setName("Trol").setDmgHigh(15).setDmgLow(3).setHP(25);
-        Enemy rytir = new EnemyImpl().setName("Rytir").setDmgHigh(25).setDmgLow(10).setHP(48);
+        Enemy rytir = new EnemyImpl().setName("Rytir").setDmgHigh(20).setDmgLow(10).setHP(48);
         Enemy lucius = new EnemyImpl().setName("Lucius").setDmgHigh(35).setDmgLow(25).setHP(99);
         baseRoom.registerEnemy(trol);
         roomMid.registerEnemy(rytir);
@@ -90,8 +91,10 @@ public class GameDataImpl implements GameData {
         Item klic = new Key("klic k neznamemu", "klic");
         Item brneni = new Armor(30, "brneni", "zelezne brneni");
         Item lektvar = new Potion("lektvar leceni", "lektvar", 50);
+        Item rukavice = new Armor(10, "rukavice", "kozene rukavice");
 
         baseRoom.addItem(hul);
+        baseRoom.addItem(rukavice);
         roomMid.addItem(mec);
         roomMid.addItem(klic);
         roomMid.addItem(brneni);

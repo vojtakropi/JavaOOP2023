@@ -1,6 +1,6 @@
 package cz.cvut.vk.controller;
 
-import cz.cvut.vk.service.ScoreboardService;
+import cz.cvut.vk.service.GameRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,26 +9,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/board/")
-public class ScoreboardController {
+public class GameRecordController {
 
 
     @Autowired
-    private final ScoreboardService scoreboardService;
+    private final GameRecordService gameRecordService;
 
 
-    public ScoreboardController(ScoreboardService scoreboardService) {
-        this.scoreboardService = scoreboardService;
+    public GameRecordController(GameRecordService gameRecordService) {
+        this.gameRecordService = gameRecordService;
     }
 
 
-    @GetMapping("/leaders")
+    /*@GetMapping("/leaders")
     public String getLeaders(){
-        return scoreboardService.topTen();
-    }
+        return gameRecordService.topTen();
+    }*/
 
     @GetMapping("/games/{username}")
     public String myGames(@PathVariable String username){
-        return scoreboardService.myGames(username);
+        boolean canPlay = gameRecordService.status(username);
+        if (!canPlay) return "You played no games yet";
+        return gameRecordService.myGames(username);
     }
 
 }
