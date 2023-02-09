@@ -3,6 +3,7 @@ package cz.cvut.vk.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import cz.cvut.vk.controller.UserController;
 import cz.cvut.vk.game.Game;
 import cz.cvut.vk.game.GameImpl;
 import cz.cvut.vk.model.GameRecord;
@@ -11,12 +12,16 @@ import cz.cvut.vk.repository.GameRecordRepository;
 import cz.cvut.vk.repository.UserRepository;
 import jakarta.transaction.Transactional;
 
+import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Component
 public class UserService {
 
@@ -24,12 +29,10 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private static final Logger logger = LogManager.getLogger(UserService.class);
+
     private final GameRecordRepository gameRecordRepository;
 
-    public UserService(UserRepository userRepository, GameRecordRepository gameRecordRepository) {
-        this.userRepository = userRepository;
-        this.gameRecordRepository = gameRecordRepository;
-    }
 
     private UserRecord findByUsername(String username){
         return userRepository.findByUsername(username);
@@ -87,14 +90,17 @@ public class UserService {
           onlineusers.remove(userRecord.getUsername());
           return message;
       }
+      logger.info("user" + username + " used command "+ command + " " + object);
       return message;
     }
 
     public String logout(String username, String passwd) throws JsonProcessingException {
         UserRecord userRecord = verifyUser(username, passwd);
         if (userRecord == null) return "spatne prihlasovaci udaje";
+        if(onlineusers.get(userRecord.getUsername())== null) return "zadna rozehrana hra";
         saveScore(userRecord, onlineusers.get(username).getDiference(), "Nedohrana", onlineusers.get(userRecord.getUsername()));
         onlineusers.remove(username);
+        logger.info("user" + username + " logged out ");
         return "uzivatel odhlasen, hra ulozena";
     }
 
@@ -106,6 +112,7 @@ public class UserService {
         ObjectMapper objectMapper = new ObjectMapper();
         Game game = objectMapper.readValue(gameRecord.get().getGame(), Game.class);
         onlineusers.put(userRecord.getUsername(), game);
+        logger.info("user" + username + " changed game to game ID = "+ gameid);
         return "game changed";
     }
 
@@ -121,6 +128,7 @@ public class UserService {
         userRecord.setUsername(username);
         userRecord.setPasswd(passwd);
         userRepository.save(userRecord);
+        logger.info("user "+ username + " tregistered");
         return "uzivatel registrovan";
     }
 }

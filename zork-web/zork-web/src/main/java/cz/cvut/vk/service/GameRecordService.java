@@ -5,10 +5,12 @@ import cz.cvut.vk.model.UserRecord;
 import cz.cvut.vk.repository.GameRecordRepository;
 import cz.cvut.vk.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@RequiredArgsConstructor
 @Component
 public class GameRecordService {
 
@@ -16,10 +18,6 @@ public class GameRecordService {
 
     private final UserRepository userRepository;
 
-    public GameRecordService(GameRecordRepository gameRecordRepository, UserRepository userRepository) {
-        this.gameRecordRepository = gameRecordRepository;
-        this.userRepository = userRepository;
-    }
     public boolean status(String username){
         UserRecord userRecord = userRepository.findByUsername(username);
         return userRecord!=null;
@@ -37,27 +35,35 @@ public class GameRecordService {
         return "tvoje hry: \n" + stringBuilder;
     }
 
-   /* @Transactional
+    @Transactional
     public String topTen(){
         LinkedList<GameRecord> allentries = gameRecordRepository.findAll();
         StringBuilder stringBuilder = new StringBuilder();
-        List<GameRecord> topTen = new ArrayList<>();
-        Long highest = -1L;
-        HashMap<GameRecord, Long> high = new HashMap<>();
-        high.put(null, highest);
+        HashMap<GameRecord, Long> topTen = new HashMap<>();
+        List<Long> sorted = new ArrayList<>();
         for (GameRecord allentry : allentries) {
            if(topTen.size()<10){
-               topTen.add(allentry);
-               if(allentry.getTime()>highest){
-                   highest = allentry.getTime();
-                   high.clear();
-                   high.put(allentry,highest);
-               }
+               topTen.put(allentry, allentry.getTime());
+               sorted.add(allentry.getTime());
            }else{
-               if ()
+               Collections.sort(sorted);
+               for (Long num : sorted) {
+                   for (Map.Entry<GameRecord, Long> entry : topTen.entrySet()) {
+                       if (entry.getValue().equals(num)) {
+                           topTen.put(entry.getKey(), num);
+                       }
+                   }
+               }
+               if ((topTen.entrySet().stream().reduce((one, two) -> two).get().getValue()) > allentry.getTime()){
+                   topTen.remove(topTen.entrySet().stream().reduce((one, two) -> two).get().getKey());
+                   topTen.put(allentry, allentry.getTime());
+               }
            }
         }
-        stringBuilder.append("Jmeno: ").append(allentry.getName()).append("  cas: ").append(allentry.getTime()).append("\n");
+        stringBuilder.append("top 10 \n");
+        for (Map.Entry<GameRecord, Long> entry : topTen.entrySet()) {
+            stringBuilder.append("hrac: ").append(entry.getKey().getUser().getUsername()).append(", skore: ").append(entry.getValue()).append("\n");
+        }
         return stringBuilder + "";
-    }*/
+    }
 }

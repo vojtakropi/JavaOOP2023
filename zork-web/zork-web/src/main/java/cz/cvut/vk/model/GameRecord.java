@@ -2,9 +2,13 @@ package cz.cvut.vk.model;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "scoreboard")
+@Getter
+@Setter
 public class GameRecord {
 
     @Id
@@ -22,43 +26,4 @@ public class GameRecord {
     @Column(name = "state")
     private String state;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public UserRecord getUser() {
-        return user;
-    }
-
-    public void setUser(UserRecord user) {
-        this.user = user;
-    }
-
-    public Long getTime() {
-        return time;
-    }
-
-    public void setTime(Long time) {
-        this.time = time;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getGame() {
-        return game;
-    }
-
-    public void setGame(String game) {
-        this.game = game;
-    }
 }

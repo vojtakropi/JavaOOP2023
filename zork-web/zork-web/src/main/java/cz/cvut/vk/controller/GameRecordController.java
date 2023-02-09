@@ -21,10 +21,10 @@ public class GameRecordController {
     }
 
 
-    /*@GetMapping("/leaders")
+    @GetMapping("/leaders")
     public String getLeaders(){
         return gameRecordService.topTen();
-    }*/
+    }
 
     @GetMapping("/games/{username}")
     public String myGames(@PathVariable String username){
