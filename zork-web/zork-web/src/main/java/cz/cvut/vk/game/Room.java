@@ -9,8 +9,6 @@ public interface Room {
     String getDescription();
     String getDescriptionWithExits();
     Set<String> getExits();
-    Room getExitByName(String name);
-
     void registerEnemy(Enemy enemy);
 
     Enemy getEnemy();
@@ -22,6 +20,7 @@ public interface Room {
     void removeItem(Item item);
 
     Item GetItemByName(String name);
-    void registerExit(Room room);
+
+    boolean isFinalRoom();
 
 }

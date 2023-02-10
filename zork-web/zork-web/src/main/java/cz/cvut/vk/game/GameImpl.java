@@ -1,12 +1,13 @@
 package cz.cvut.vk.game;
 
+import cz.cvut.vk.CommandLineUi;
 import cz.cvut.vk.command.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  *  Class represents running game instance
@@ -17,9 +18,15 @@ public class GameImpl implements Game {
     private Map<String, Command> commands = new HashMap<>();
     private GameData gameData;
 
+    private static final Logger log = LoggerFactory.getLogger(GameImpl.class);
+
     private LocalDateTime startdate;
 
     private long diference;
+
+    private List<String> singleCommand =  Arrays.asList("napoveda", "reset", "konec");
+
+    private List<String> noAtackComand = Arrays.asList("napoveda", "reset", "konec", "vypij", "utok");
 
     private LocalDateTime enddate;
 
@@ -35,7 +42,6 @@ public class GameImpl implements Game {
      *
      */
     private void registerCommands(){
-        Command help = new HelpCommand(commands);
         Command reset = new ResetCommand();
         GoCommand go = new GoCommand();
         AttackCommand attack = new AttackCommand();
@@ -43,14 +49,17 @@ public class GameImpl implements Game {
         EndCommand end = new EndCommand();
         DropCommand drop = new DropCommand();
         UsePotionCommand potion = new UsePotionCommand();
+        EquipCommand equip = new EquipCommand();
+        commands.put(equip.getName(), equip);
         commands.put(potion.getName(), potion);
         commands.put(drop.getName(), drop);
         commands.put(end.getName(), end);
-        commands.put(help.getName(), help);
         commands.put(reset.getName(), reset);
         commands.put(go.getName(), go);
         commands.put(attack.getName(), attack);
         commands.put(picUp.getName(), picUp);
+        Command help = new HelpCommand(commands);
+        commands.put(help.getName(), help);
 
     }
 
@@ -89,11 +98,16 @@ public class GameImpl implements Game {
     public String processTextCommand(String line) {
         String result;
         String[] args = line.split(" ");
+        if (args.length<2 && !singleCommand.contains(args[0])){
+             return "Neznámý příkaz, zkuste jiný nebo vyzkoušejte příkaz 'napoveda'";
+        }
         Command command = commands.getOrDefault(args[0], null);
         if(command != null){
+            log.info(command.getName());
+            gameData.setNews("");
             result = command.execute(args, gameData);
-            if(!Objects.equals(command.getName(), "utok") && !Objects.equals(command.getName(), "reset" ) && gameData.getCurrentRoom().getEnemy().isAlive()
-            && !Objects.equals(command.getName(), "vypij") && !Objects.equals(command.getName(), "konec") && !Objects.equals(command.getName(), "napoveda")){
+            result = result + "\n" + gameData.getNews();
+            if(!noAtackComand.contains(command.getName())){
                 result = result + "\n" + gameData.getCurrentRoom().getEnemy().strikeBack(gameData);
             }
             if (gameData.isFinished()) {
@@ -114,7 +128,7 @@ public class GameImpl implements Game {
      */
     @Override
     public boolean isFinished() {
-        //enddate = java.time.LocalDateTime.now();
+        enddate = java.time.LocalDateTime.now();
         return gameData.isFinished();
     }
     @Override

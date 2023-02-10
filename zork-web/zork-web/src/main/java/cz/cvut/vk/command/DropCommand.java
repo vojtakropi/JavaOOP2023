@@ -4,8 +4,6 @@ import cz.cvut.vk.game.GameData;
 import cz.cvut.vk.game.Item;
 
 public class DropCommand implements Command{
-    public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_RESET = "\u001B[0m";
     @Override
     public String getName() {
         return "zahod";
@@ -13,9 +11,15 @@ public class DropCommand implements Command{
 
     @Override
     public String execute(String[] arguments, GameData gameData) {
+        if(arguments == null || arguments.length<2){
+            return "zadej predmet k zahozeni";
+        }
         String itemname = arguments[1];
-        Item item = gameData.getCurrentRoom().GetItemByName(itemname);
+        Item item = gameData.getIventory().getItemByName(itemname);
+        if(item == null){
+            return "nemas v inventari tento predmet";
+        }
         item.Drop(gameData);
-        return ANSI_BLUE + "Předmět:" + item.getName() +" zahozen" + ANSI_RESET;
+        return "Předmět:" + item.getName() +" zahozen";
     }
 }

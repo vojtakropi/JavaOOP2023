@@ -30,4 +30,10 @@ public interface GameData {
     void setWon(boolean won);
 
     boolean ended();
+
+    Room getExit(Room room);
+
+    void setNews(String news);
+
+    String getNews();
 }

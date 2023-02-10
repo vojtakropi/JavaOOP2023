@@ -1,5 +1,6 @@
-package cz.cvut.vk.command;
+package cz.cvut.oop.command;
 
+import cz.cvut.vk.command.ResetCommand;
 import cz.cvut.vk.game.GameDataImpl;
 import org.junit.Assert;
 import org.junit.Test;

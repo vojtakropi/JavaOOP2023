@@ -36,6 +36,11 @@ public class Potion implements Item{
     }
 
     @Override
+    public String equip(GameData gameData) {
+        return null;
+    }
+
+    @Override
     public void Drop(GameData gameData) {
         gameData.getIventory().dropItem(this, gameData);
     }

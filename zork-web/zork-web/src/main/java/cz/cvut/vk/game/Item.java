@@ -8,6 +8,8 @@ public interface Item {
 
     String picUp(GameData gameData);
 
+    String equip(GameData gameData);
+
     void Drop(GameData gameData);
 
     String getName();

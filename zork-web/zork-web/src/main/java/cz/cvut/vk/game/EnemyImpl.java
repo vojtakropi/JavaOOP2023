@@ -7,6 +7,8 @@ public class EnemyImpl implements Enemy{
 
     private String name;
 
+    private boolean isBoss;
+
     private int HP;
 
     private boolean alive;
@@ -15,28 +17,18 @@ public class EnemyImpl implements Enemy{
 
     private int dmgHigh;
 
-    public EnemyImpl() {
+    private EnemyImpl(EnemyBuilder builder) {
         this.alive = true;
+        this.name = builder.name;
+        this.HP = builder.HP;
+        this.dmgLow = builder.dmgLow;
+        this.dmgHigh = builder.dmgHigh;
+        this.isBoss = builder.isBoss;
     }
 
-    public Enemy setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public Enemy setHP(int HP) {
-        this.HP = HP;
-        return this;
-    }
-
-    public Enemy setDmgLow(int dmgLow) {
-        this.dmgLow = dmgLow;
-        return this;
-    }
-
-    public Enemy setDmgHigh(int dmgHigh) {
-        this.dmgHigh = dmgHigh;
-        return this;
+    @Override
+    public boolean isBoss() {
+        return isBoss;
     }
 
     @Override
@@ -57,7 +49,7 @@ public class EnemyImpl implements Enemy{
         if (HP<=0){
             alive = false;
             gameData.setHP(gameData.getMaxHP());
-            if (Objects.equals(gameData.getCurrentRoom().getEnemy().getName(), "Lucius")) {
+            if (isBoss) {
                 gameData.setWon(true);
             }
             return "Zabil jsi: " + name + " a obnovil sis všechny životy:" + gameData.getMaxHP();
@@ -92,5 +84,51 @@ public class EnemyImpl implements Enemy{
                 ", dmgLow=" + dmgLow +
                 ", dmgHigh=" + dmgHigh +
                 '}';
+    }
+    public static class EnemyBuilder {
+
+
+        private String name;
+
+        private boolean isBoss;
+
+        private int HP;
+
+        private int dmgLow;
+
+        private int dmgHigh;
+
+        public EnemyBuilder(String name) {
+            this.name = name;
+        }
+
+        public EnemyBuilder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public EnemyBuilder setBoss(boolean boss) {
+            isBoss = boss;
+            return this;
+        }
+
+        public EnemyBuilder setHP(int HP) {
+            this.HP = HP;
+            return this;
+        }
+
+        public EnemyBuilder setDmgLow(int dmgLow) {
+            this.dmgLow = dmgLow;
+            return this;
+        }
+
+        public EnemyBuilder setDmgHigh(int dmgHigh) {
+            this.dmgHigh = dmgHigh;
+            return this;
+        }
+
+        public Enemy build() {
+            return new EnemyImpl(this);
+        }
     }
 }

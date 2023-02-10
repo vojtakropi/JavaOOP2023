@@ -3,6 +3,8 @@ package cz.cvut.vk.command;
 import cz.cvut.vk.game.GameData;
 import cz.cvut.vk.game.Weapon;
 
+import java.util.Objects;
+
 public class AttackCommand implements Command{
     @Override
     public String getName() {
@@ -11,11 +13,14 @@ public class AttackCommand implements Command{
 
     @Override
     public String execute(String[] arguments, GameData gameData) {
-        try {
+        if(arguments == null || arguments.length<2){
+            return "zadej nepritele k utoku";
+        }
             Weapon weapon = (Weapon) gameData.getIventory().getItems().get(1);
-            return gameData.GetEnemy().dealDmg(weapon, gameData);
-        }catch (Exception e){
-            return "nemáš zbraň";
+            if (weapon!=null && gameData.getIventory().isEquiped(weapon)){
+                return gameData.GetEnemy().dealDmg(weapon, gameData);
+            }
+            return "nemáš nasazenou zbraň";
         }
     }
-}
+

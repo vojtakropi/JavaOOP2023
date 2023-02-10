@@ -8,6 +8,8 @@ import java.util.*;
 public class RoomImpl implements Room {
 
     private String name;
+
+    private boolean finalRoom;
     private String description;
     private Map<String,Room> exits = new HashMap<>();
 
@@ -19,18 +21,12 @@ public class RoomImpl implements Room {
     public RoomImpl() {
     }
 
-    public RoomImpl(String name, String description){
+    public RoomImpl(String name, String description, boolean finalRoom){
         this.name = name;
         this.description = description;
+        this.finalRoom = finalRoom;
     }
 
-    /**
-     *  Adds new exit to map
-     */
-    @Override
-    public void registerExit(Room room){
-        exits.put(room.getName(), room);
-    }
 
     @Override
     public String getName() {
@@ -74,10 +70,6 @@ public class RoomImpl implements Room {
     /**
      *  Returns room based on entered room (exit) name
      */
-    @Override
-    public Room getExitByName(String name) {
-        return exits.getOrDefault(name, null);
-    }
 
     @Override
     public void registerEnemy(Enemy enemy) {
@@ -122,5 +114,9 @@ public class RoomImpl implements Room {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    public boolean isFinalRoom() {
+        return finalRoom;
     }
 }

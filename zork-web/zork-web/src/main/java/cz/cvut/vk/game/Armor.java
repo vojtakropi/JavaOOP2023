@@ -31,8 +31,13 @@ public class Armor implements Item{
 
     @Override
     public String picUp(GameData gameData) {
-        gameData.setMaxHP(gameData.getMaxHP()+HPGain);
         return gameData.getIventory().addItem(this, gameData);
+    }
+
+    @Override
+    public String equip(GameData gameData) {
+        gameData.setMaxHP(gameData.getMaxHP()+HPGain);
+        return this.name + " nasazeno, celkovy pocet zivotu se zvysil o " + HPGain;
     }
 
     @Override

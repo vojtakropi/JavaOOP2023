@@ -1,13 +1,14 @@
 package cz.cvut.vk.game;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  *  All mutable game data should exist within this class
  *  e.g. room map, finished, inventory, weapons..
  */
-public class GameDataImpl implements GameData {
+public class GameDataImpl implements GameData, Observer {
 
     private Room currentRoom;
     private boolean finished;
@@ -15,11 +16,15 @@ public class GameDataImpl implements GameData {
     private boolean bygame;
     private List<Room> rooms;
 
+    private String news;
+
     private boolean win = false;
 
     private int HP = 100;
 
     private int maxHp;
+
+    private HashMap<Room, Room> exits = new HashMap<>();
 
     private Inventory inventory;
 
@@ -63,24 +68,26 @@ public class GameDataImpl implements GameData {
      */
     public GameDataImpl(){
         this.inventory = new InventoryImpl();
+        inventory.addObserver(this);
         this.init();
     }
 
     public void init(){
         maxHp = 100;
         this.rooms = new ArrayList<>();
-        Room baseRoom = new RoomImpl("jeskyne", "temná jeskyně se spícím trolem");
+        Room baseRoom = new RoomImpl("jeskyne", "temná jeskyně se spícím trolem", false);
         rooms.add(baseRoom);
-        Room roomMid = new RoomImpl("hrad", "hrad který obýval král a jeho oddaný voják");
+        Room roomMid = new RoomImpl("hrad", "hrad který obýval král a jeho oddaný voják", false);
         rooms.add(roomMid);
-        Room roomFinal = new RoomImpl("pohrebiste", "zde odpočívá nejsilnější voják hradní stráže - Lucius");
+        Room roomFinal = new RoomImpl("pohrebiste", "zde odpočívá nejsilnější voják hradní stráže - Lucius", true);
         rooms.add(roomFinal);
-        baseRoom.registerExit(roomMid);
-        roomMid.registerExit(roomFinal);
+        exits.put(baseRoom,roomMid);
+        exits.put(roomMid, roomFinal);
 
-        Enemy trol = new EnemyImpl().setName("Trol").setDmgHigh(15).setDmgLow(3).setHP(25);
-        Enemy rytir = new EnemyImpl().setName("Rytir").setDmgHigh(20).setDmgLow(10).setHP(48);
-        Enemy lucius = new EnemyImpl().setName("Lucius").setDmgHigh(35).setDmgLow(25).setHP(99);
+
+        Enemy trol = EnemyFactory.getEnemy("trol").setBoss(false).setDmgLow(3).setDmgHigh(12).setHP(30).build();
+        Enemy rytir = EnemyFactory.getEnemy("rytir").setBoss(false).setDmgHigh(20).setDmgLow(10).setHP(48).build();
+        Enemy lucius = EnemyFactory.getEnemy("Lucius").setBoss(true).setDmgHigh(35).setDmgLow(25).setHP(99).build();
         baseRoom.registerEnemy(trol);
         roomMid.registerEnemy(rytir);
         roomFinal.registerEnemy(lucius);
@@ -91,8 +98,10 @@ public class GameDataImpl implements GameData {
         Item klic = new Key("klic k neznamemu", "klic");
         Item brneni = new Armor(30, "brneni", "zelezne brneni");
         Item lektvar = new Potion("lektvar leceni", "lektvar", 50);
+        Item kapka = new Potion("lektvar leceni maleho ucinku", "kapka", 15);
         Item rukavice = new Armor(10, "rukavice", "kozene rukavice");
 
+        baseRoom.addItem(kapka);
         baseRoom.addItem(hul);
         baseRoom.addItem(rukavice);
         roomMid.addItem(mec);
@@ -104,6 +113,10 @@ public class GameDataImpl implements GameData {
         this.currentRoom = baseRoom;
     }
 
+
+    public Room getExit(Room room){
+        return exits.get(room);
+    }
     @Override
     public List<Room> getRooms() {
         return rooms;
@@ -152,5 +165,18 @@ public class GameDataImpl implements GameData {
     @Override
     public boolean ended() {
         return bygame;
+    }
+
+    @Override
+    public void update(Object o) {
+        this.setNews((String) o);
+    }
+
+    public void setNews(String news) {
+        this.news = news;
+    }
+
+    public String getNews() {
+        return news;
     }
 }

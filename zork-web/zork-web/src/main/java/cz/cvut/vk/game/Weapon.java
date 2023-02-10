@@ -40,6 +40,11 @@ public class Weapon implements Item {
     }
 
     @Override
+    public String equip(GameData gameData) {
+        return gameData.getIventory().equipItem(this, gameData);
+    }
+
+    @Override
     public void Drop(GameData gameData) {
         gameData.getIventory().dropItem(this, gameData);
     }
