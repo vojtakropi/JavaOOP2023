@@ -66,7 +66,6 @@ public class GameDataImpl implements GameData, Observer {
     /**
      *  Room map registration in constructor
      */
-
     public GameDataImpl(){
         this.inventory = new InventoryImpl();
         inventory.addObserver(this);
@@ -179,25 +178,5 @@ public class GameDataImpl implements GameData, Observer {
 
     public String getNews() {
         return news;
-    }
-
-    public boolean isBygame() {
-        return bygame;
-    }
-
-    public boolean isWin() {
-        return win;
-    }
-
-    public int getMaxHp() {
-        return maxHp;
-    }
-
-    public HashMap<Room, Room> getExits() {
-        return exits;
-    }
-
-    public Inventory getInventory() {
-        return inventory;
     }
 }

@@ -25,8 +25,7 @@ public class GoCommand implements Command{
             return "neexistujici exit";
         }
         gameData.setCurrentRoom(exit);
-        return "Přesunut do místnosti " + gameData.getCurrentRoom().getDescription() +
-                "\n vychod je " + gameData.getExit(gameData.getCurrentRoom()).getName() +
+        return "Přesunut do místnosti " + gameData.getCurrentRoom().getDescriptionWithExits() +
                 "\n v místnosti jsou tyto předměty: " + gameData.getCurrentRoom().getItems() +
                 "\n a pozor na tohoto nepřitele: " + gameData.getCurrentRoom().getEnemy().toString();
     }

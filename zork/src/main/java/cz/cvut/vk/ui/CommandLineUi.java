@@ -1,4 +1,4 @@
-package cz.cvut.vk;
+package cz.cvut.vk.ui;
 
 import cz.cvut.vk.game.Game;
 import cz.cvut.vk.game.GameImpl;
@@ -28,7 +28,7 @@ public class CommandLineUi {
         log.info("application started");
         try(Scanner scanner = new Scanner(System.in)){
             System.out.println(this.game.welcomeMessage());
-            while(this.game.isFinished()){
+            while(!this.game.isFinished()){
                 System.out.print("> ");
                 System.out.println(this.game.processTextCommand(scanner.nextLine()));
             }

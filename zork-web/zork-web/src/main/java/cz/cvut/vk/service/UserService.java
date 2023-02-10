@@ -1,5 +1,7 @@
 package cz.cvut.vk.service;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -60,9 +62,10 @@ public class UserService {
         gameRecord.setState(state);
         gameRecord.setTime(0L);
         gameRecord.setTime(score);
-        boolean u = objectMapper.canSerialize(game.getClass());
-        String t = objectMapper.writeValueAsString(game);
-        gameRecord.setGame(t);
+        //this part serialize the object but its too big
+        /*boolean u = objectMapper.canSerialize(game.getClass());
+        String t = objectMapper.writeValueAsString(game);*/
+        gameRecord.setGame("default-showPurpous");
         userRecord.getGames().add(gameRecord);
         userRepository.save(userRecord);
     }

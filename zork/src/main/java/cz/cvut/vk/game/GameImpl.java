@@ -15,29 +15,11 @@ import java.util.*;
 public class GameImpl implements Game {
 
     private Map<String, Command> commands = new HashMap<>();
-
-    public Map<String, Command> getCommands() {
-        return commands;
-    }
-
-    public GameData getGameData() {
-        return gameData;
-    }
-
-    public List<String> getSingleCommand() {
-        return singleCommand;
-    }
-
-    public List<String> getNoAtackComand() {
-        return noAtackComand;
-    }
-
-
     private GameData gameData;
 
     private static final Logger log = LoggerFactory.getLogger(GameImpl.class);
 
-    private long startdate;
+    private LocalDateTime startdate;
 
     private long diference;
 
@@ -45,7 +27,9 @@ public class GameImpl implements Game {
 
     private List<String> noAtackComand = Arrays.asList("napoveda", "reset", "konec", "vypij", "utok");
 
-    private long enddate;
+    private LocalDateTime enddate;
+
+
 
     public GameImpl(){
         this.registerCommands();
@@ -84,7 +68,7 @@ public class GameImpl implements Game {
      */
     @Override
     public String welcomeMessage() {
-        startdate = System.currentTimeMillis();
+        //startdate = java.time.LocalDateTime.now();
         return  "Vítej ve hře Vojtův Dungeon \n pokud nevíte co a jak, použijte příkaz 'nápověda' \n právě jste v místonti: "
                 + gameData.getCurrentRoom().getDescription() +"\n Další místnost je " + gameData.getExit(gameData.getCurrentRoom()).getName()+
                 "\n v místnosti jsou tyto předměty: " + gameData.getCurrentRoom().getItems() +
@@ -122,11 +106,11 @@ public class GameImpl implements Game {
             gameData.setNews("");
             result = command.execute(args, gameData);
             result = result + "\n" + gameData.getNews();
-            if(!noAtackComand.contains(command.getName())){
+            if(!noAtackComand.contains(command.getName()) && gameData.GetEnemy().isAlive()){
                 result = result + "\n" + gameData.getCurrentRoom().getEnemy().strikeBack(gameData);
             }
             if (gameData.isFinished()) {
-                diference = (enddate-startdate)/1000;
+                diference = ChronoUnit.SECONDS.between(startdate, enddate);
                 return result + "\n" +endMessage() + "\n KONEC HRY: tvuj cas byl: " + diference + "sekund";
             }else return result;
         }
@@ -143,7 +127,7 @@ public class GameImpl implements Game {
      */
     @Override
     public boolean isFinished() {
-        enddate = System.currentTimeMillis();
+        enddate = java.time.LocalDateTime.now();
         return gameData.isFinished();
     }
     @Override
@@ -154,6 +138,6 @@ public class GameImpl implements Game {
 
     @Override
     public long getDiference() {
-        return (System.currentTimeMillis()-startdate)/1000;
+        return diference;
     }
 }

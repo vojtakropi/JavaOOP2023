@@ -11,6 +11,8 @@ public class RoomImpl implements Room {
 
     private boolean finalRoom;
     private String description;
+    private Map<String,Room> exits = new HashMap<>();
+
     private LinkedList<Item> items = new LinkedList<>();
 
     private Enemy enemy;
@@ -31,6 +33,14 @@ public class RoomImpl implements Room {
         return name;
     }
 
+    /**
+     *  Method returns description of this room (from getDescription call)
+     *  and should add possible exit names
+     */
+    @Override
+    public String getDescriptionWithExits() {
+        return this.name + ": " +this.description + "\n východy: " + String.join(", ", this.exits.keySet());
+    }
 
     /**
      *  Method returns description of this room
@@ -43,6 +53,10 @@ public class RoomImpl implements Room {
     /**
      * Return unmodifiable view of our map
      */
+    @Override
+    public Set<String> getExits() {
+        return exits.keySet();
+    }
 
     @Override
     public StringBuilder getItems() {
@@ -105,5 +119,4 @@ public class RoomImpl implements Room {
     public boolean isFinalRoom() {
         return finalRoom;
     }
-
 }

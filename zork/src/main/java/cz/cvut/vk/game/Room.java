@@ -7,6 +7,8 @@ public interface Room {
 
     String getName();
     String getDescription();
+    String getDescriptionWithExits();
+    Set<String> getExits();
     void registerEnemy(Enemy enemy);
 
     Enemy getEnemy();
